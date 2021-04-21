@@ -8,9 +8,8 @@ class AuthService extends Service
 {
     public function register()
     {
-        $this->app->bind('auth', function () {
-            $config = new Config(config('auth'));
-            $auth = new Auth($config);
+        $this->app->bind('auth', function ($store = null) {
+            $auth = new Auth(config('auth'));
 
             return $auth;
         });

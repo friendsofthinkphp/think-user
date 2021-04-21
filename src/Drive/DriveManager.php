@@ -3,7 +3,7 @@
 namespace think\User\Drive;
 
 use think\User\AuthorizationUserInterface;
-use think\User\Config;
+use think\User\Config\Config;
 use think\User\Drive\DriveInterface;
 use think\User\Exception\Unauthorized;
 
@@ -52,7 +52,7 @@ class DriveManager
 
         $model = new $class();
         if ($model instanceof AuthorizationUserInterface) {
-            return $model->find($id);
+            return $model->getUserById($id);
         } else {
             throw new Unauthorized('implements ' . AuthorizationUserInterface::class);
         }

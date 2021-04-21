@@ -2,31 +2,59 @@
 
 namespace think\User;
 
+use think\User\Config\Config;
 use think\User\Drive\DriveManager;
-use think\User\Config;
 
 class Auth
 {
+    /**
+     * @var array
+     */
+    protected $options;
+
     /**
      * @var Config
      */
     protected $config;
 
     /**
+     * @var string
+     */
+    protected $store;
+
+    /**
      * @var DriveManager
      */
     protected $manager;
 
-    public function __construct(Config $config)
+    public function __construct(array $options)
     {
-        $this->config = $config;
+        $this->options = $options;
 
         $this->init();
     }
 
-    protected function init()
+    private function init()
     {
-        $this->manager = $this->getManager();
+        $this->makeConfig();
+        $this->makeManager();
+    }
+
+    public function store($store)
+    {
+        $this->store = $store;
+        return $this;
+    }
+
+    protected function getDefaultApp()
+    {
+        return $this->options['default'];
+    }
+
+    protected function makeConfig()
+    {
+        $app = $this->store ?? $this->getDefaultApp();
+        $this->config = new Config($this->options['stores'][$app]);
     }
 
     protected function getConfig()
@@ -34,9 +62,9 @@ class Auth
         return $this->config;
     }
 
-    protected function getManager()
+    protected function makeManager()
     {
-        return new DriveManager($this->config);
+        $this->manager = new DriveManager($this->config);
     }
 
     public function __call($name, $argv)
