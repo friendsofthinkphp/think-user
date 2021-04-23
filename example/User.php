@@ -7,17 +7,17 @@ class User implements AuthorizationUserInterface
 {
     public function hasUserByUserName($username): bool
     {
-        return false;
+        return $this->where('username', $username)->find() ? true : false;
     }
 
     public function getUserByUserName($username): AuthorizationUserInterface
     {
-        return $this;
+        return $this->where('username', $username)->find();
     }
 
     public function verifyPassword($password): bool
     {
-        return false;
+        return password_verify($password, $this->password);
     }
 
     public function setUserName($username): AuthorizationUserInterface
@@ -28,6 +28,7 @@ class User implements AuthorizationUserInterface
 
     public function setPassword($password): AuthorizationUserInterface
     {
+        $this->password = $password;
         return $this;
     }
 
