@@ -36,9 +36,4 @@ class User implements AuthorizationUserInterface
     {
         return '';
     }
-
-    public function find()
-    {
-        return $this;
-    }
 }
